@@ -9,11 +9,11 @@ import {
 } from "react-native"
 import {Button, Header, Icon, Screen, Text, TextField, TextFieldAccessoryProps} from "../../components"
 import { useStores } from "../../models"
-import { AppStackScreenProps } from "../../navigators"
+import { OnboardingStackScreenProps } from "../../navigators"
 import { colors, spacing } from "../../theme"
 const logo = require("../../../assets/images/logo.png")
 
-interface OnboardingLoginScreenProps extends AppStackScreenProps<"OnboardingLogin"> {}
+interface OnboardingLoginScreenProps extends OnboardingStackScreenProps<"OnboardingLogin"> {}
 
 export const OnboardingLoginScreen: FC<OnboardingLoginScreenProps> = observer(function OnboardingLoginScreen(_props) {
 

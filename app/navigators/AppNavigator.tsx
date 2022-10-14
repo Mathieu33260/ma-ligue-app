@@ -15,7 +15,7 @@ import { observer } from "mobx-react-lite"
 import React from "react"
 import { useColorScheme } from "react-native"
 import Config from "../config"
-import { useStores } from "../models" // @demo remove-current-line
+import { useStores } from "../models"
 import {
   WelcomeScreen,
 } from "../screens"
@@ -24,6 +24,7 @@ import {
   OnboardingTeamScreen,
 } from "../screens/OnboardingScreen"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
+import {HomeScreen} from '../screens/HomeScreen';
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -39,7 +40,10 @@ import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
  *   https://reactnavigation.org/docs/typescript/#organizing-types
  */
 export type AppStackParamList = {
-  Welcome: undefined
+  Home: undefined,
+}
+
+export type OnboardingStackParamList = {
   OnboardingLeague: undefined,
   OnboardingTeam: { league: number },
   OnboardingLogin: { team: string },
@@ -56,38 +60,42 @@ export type AppStackScreenProps<T extends keyof AppStackParamList> = StackScreen
   T
 >
 
-// Documentation: https://reactnavigation.org/docs/stack-navigator/
-const Stack = createNativeStackNavigator<AppStackParamList>()
+export type OnboardingStackScreenProps<T extends keyof OnboardingStackParamList> = StackScreenProps<
+    OnboardingStackParamList,
+    T
+    >
 
-const AppStack = observer(function AppStack() {
-  // @demo remove-block-start
+const AppStack = createNativeStackNavigator<AppStackParamList>()
+const OnboardingStack = createNativeStackNavigator<OnboardingStackParamList>()
+
+const RootStack = observer(function RootStack() {
+
   const {
     authenticationStore: { isAuthenticated },
   } = useStores()
 
-  // @demo remove-block-end
   return (
-    <Stack.Navigator
-      screenOptions={{ headerShown: false }}
-      initialRouteName={isAuthenticated ? "Welcome" : "OnboardingLeague"}
-    >
-      {/* @demo remove-block-start */}
-      {isAuthenticated ? (
-        <>
-          {/* @demo remove-block-end */}
-          <Stack.Screen name="Welcome" component={WelcomeScreen} />
-          {/* @demo remove-block-start */}
-        </>
-      ) : (
-        <>
-          <Stack.Screen name="OnboardingLeague" component={OnboardingLeagueScreen} />
-          <Stack.Screen name="OnboardingTeam" component={OnboardingTeamScreen} />
-          <Stack.Screen name="OnboardingLogin" component={OnboardingLoginScreen} />
-        </>
-      )}
-      {/* @demo remove-block-end */}
-      {/** 🔥 Your screens go here */}
-    </Stack.Navigator>
+      isAuthenticated ? (
+          <AppStack.Navigator
+              screenOptions={{ headerShown: false }}
+              initialRouteName={"Home"}
+          >
+            <>
+              <AppStack.Screen name="Home" component={HomeScreen} />
+            </>
+          </AppStack.Navigator>
+          ) : (
+          <OnboardingStack.Navigator
+              screenOptions={{ headerShown: false }}
+              initialRouteName={"OnboardingLeague"}
+          >
+            <>
+              <OnboardingStack.Screen name="OnboardingLeague" component={OnboardingLeagueScreen} />
+              <OnboardingStack.Screen name="OnboardingTeam" component={OnboardingTeamScreen} />
+              <OnboardingStack.Screen name="OnboardingLogin" component={OnboardingLoginScreen} />
+            </>
+          </OnboardingStack.Navigator>
+      )
   )
 })
 
@@ -104,7 +112,7 @@ export const AppNavigator = observer(function AppNavigator(props: NavigationProp
       theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
       {...props}
     >
-      <AppStack />
+      <RootStack />
     </NavigationContainer>
   )
 })

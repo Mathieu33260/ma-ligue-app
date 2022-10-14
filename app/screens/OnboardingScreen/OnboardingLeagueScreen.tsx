@@ -10,12 +10,12 @@ import {
 } from "react-native"
 import {Button, Header, Icon, Screen, Text} from "../../components"
 import { useStores } from "../../models"
-import { AppStackScreenProps } from "../../navigators"
+import { OnboardingStackScreenProps } from "../../navigators"
 import { colors, spacing } from "../../theme"
 import {League} from '../../models/League';
 const logo = require("../../../assets/images/logo.png")
 
-interface OnboardingLeagueScreenProps extends AppStackScreenProps<"OnboardingLeague"> {}
+interface OnboardingLeagueScreenProps extends OnboardingStackScreenProps<"OnboardingLeague"> {}
 
 export const OnboardingLeagueScreen: FC<OnboardingLeagueScreenProps> = observer(function OnboardingLeagueScreen(_props) {
 
