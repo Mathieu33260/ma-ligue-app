@@ -114,14 +114,7 @@ export class Api {
     }
   }
 
-  async getUser(): Promise<{ kind: "ok"; user: UserSnapshotIn } | GeneralApiProblem> {
-
-    const {
-      authenticationStore: {
-          authToken,
-          id,
-      },
-    } = useStores()
+  async getUser(id: number, authToken: string): Promise<{ kind: "ok"; user: UserSnapshotIn } | GeneralApiProblem> {
 
     this.apisauce.setHeader('Authorization', `Bearer ${authToken}`)
     const response: ApiResponse<ApiFeedResponse> = await this.apisauce.get(

@@ -39,7 +39,7 @@ export const AuthenticationStoreModel = types
         store.user = undefined
       },
       async fetchUser() {
-        const response = await api.getUser()
+        const response = await api.getUser(store.getId, store.getAuthToken)
         if (response.kind === "ok") {
           store.setProp("user", response.user)
         } else {
@@ -51,6 +51,7 @@ export const AuthenticationStoreModel = types
         if (response.kind === "ok") {
           store.setProp("id", response.id)
           store.setProp("authToken", response.token)
+          await this.fetchUser()
         } else {
           console.tron.error(`Error fetching token: ${JSON.stringify(response)}`, [])
         }
